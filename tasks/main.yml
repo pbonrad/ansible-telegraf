@@ -1,0 +1,35 @@
+---
+# tasks file for telegraf
+- name: Add Telegraf apt key
+  apt_key:
+    url=https://repos.influxdata.com/influxdb.key
+    id=2582E0C5
+    state=present
+  become: true
+
+- name: Add Telegraf apt repository
+  apt_repository:
+    repo="deb https://repos.influxdata.com/{{ ansible_distribution | lower }} {{ ansible_distribution_release | lower }} stable"
+    update_cache=yes
+    state=present
+  become: true
+
+- name: Install Telegraf
+  apt:
+    name=telegraf
+    state=present
+  become: true
+
+- name: Configure Telegraf
+  template:
+    src=telegraf.conf.j2
+    dest=/etc/telegraf/telegraf.conf
+  become: true
+  notify: Restart Telegraf
+
+- name: Start Telegraf as service and enable to start on boot
+  service:
+    name=telegraf
+    state=started
+    enabled=yes
+  become: true

@@ -1,0 +1,7 @@
+---
+# handlers file for telegraf
+- name: Restart Telegraf
+  service:
+    name=telegraf
+    state=restarted
+  become: true
