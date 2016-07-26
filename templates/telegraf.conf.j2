@@ -43,8 +43,14 @@
 {% for item in telegraf_output_plugins %}
 [[outputs.{{ item.name }}]]
 {% if item.config is defined and item.config is iterable %}
-{% for items in item.config %}
-  {{ items }}
+{% for key, value in item.config.iteritems() %}
+{% if value is sequence and value is not string %}
+  {{ key }} = [ "{{ value|join('", "') }}" ]
+{% elif value == "true" or value == "false" or value is number %}
+  {{ key }} = {{ value }}
+{% else %}
+  {{ key }} = "{{ value }}"
+{% endif %}
 {% endfor %}
 {% endif %}
 {% endfor %}
@@ -58,8 +64,14 @@
 {% for item in telegraf_input_plugins %}
 [[inputs.{{ item.name }}]]
 {% if item.config is defined and item.config is iterable %}
-{% for items in item.config %}
-  {{ items }}
+{% for key, value in item.config.iteritems() %}
+{% if value is sequence and value is not string %}
+  {{ key }} = [ "{{ value|join('", "') }}" ]
+{% elif value == "true" or value == "false" or value is number %}
+  {{ key }} = {{ value }}
+{% else %}
+  {{ key }} = "{{ value }}"
+{% endif %}
 {% endfor %}
 {% endif %}
 {% endfor %}

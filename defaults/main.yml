@@ -72,11 +72,11 @@ telegraf_agent_omit_hostname: "false"
 telegraf_output_plugins:
   - name: "influxdb"
     config:
-    - urls: ["http://localhost:8086"]
-    - database: "telegraf"
-    - retention_policy: ""
-    - write_consistency: "any"
-    - timeout: "5s"
+      urls: ["http://localhost:8086"]
+      database: "telegraf"
+      retention_policy: ""
+      write_consistency: "any"
+      timeout: "5s"
 
 ###############################################################################
 #                            INPUT PLUGINS                                    #
@@ -85,12 +85,15 @@ telegraf_output_plugins:
 telegraf_input_plugins:
   - name: cpu
     config:
-    - percpu: "true"
-    - totalcpu: "true"
+      percpu: "true"
+      totalcpu: "true"
+      fielddrop: ["time_*"]
   - name: disk
-  - name: io
+    config:
+      ignore_fs: ["tmpfs", "devtmpfs"]
+  - name: diskio
+  - name: kernel
   - name: mem
-  - name: net
-  - name: system
+  - name: processes
   - name: swap
-  - name: netstat
+  - name: system
