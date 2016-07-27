@@ -30,7 +30,7 @@ echo "ansible-$DISTRIBUTION ansible_connection=docker" > tests/inventory
 ansible-playbook -i tests/inventory tests/test.yml --syntax-check
 ansible-playbook -i tests/inventory tests/test.yml
 
-CONTAINER_IP=$(docker inspect -f '{{ .NetworkSettings.IPAddress }}' ansible-$DISTRIBUTION)
+docker exec ansible-$DISTRIBUTION telegraf -config /etc/telegraf/telegraf.conf -test
 
 echo "### Clean up"
 docker stop ansible-$DISTRIBUTION

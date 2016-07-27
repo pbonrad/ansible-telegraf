@@ -34,5 +34,8 @@ script:
   # Run playbook role to install on docker container
   - ansible-playbook -i tests/inventory tests/test.yml
 
+  # Check if telegraf works
+  - docker exec ansible-${distribution} telegraf -config /etc/telegraf/telegraf.conf -test
+
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/
